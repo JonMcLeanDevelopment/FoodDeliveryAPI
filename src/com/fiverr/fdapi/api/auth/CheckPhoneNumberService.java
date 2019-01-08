@@ -34,7 +34,6 @@ public class CheckPhoneNumberService {
 			results = prep.executeQuery();
 			
 			if(results.next() == false) {
-				System.err.println("AWIODIOAWDIOAIOWDIO");
 				JSONObject noPhone = new JSONObject();
 				noPhone.put("code", 306);
 				noPhone.put("message", "No phone number was found");
