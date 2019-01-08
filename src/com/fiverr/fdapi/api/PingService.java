@@ -1,4 +1,4 @@
-package com.fiverr.fdapi;
+package com.fiverr.fdapi.api;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
