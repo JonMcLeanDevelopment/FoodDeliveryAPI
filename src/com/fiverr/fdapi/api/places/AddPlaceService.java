@@ -26,7 +26,7 @@ public class AddPlaceService {
 		
 		try {
 			conn = API.ds.getConnection();
-			String sql = "INSERT INTO `places` (`place_name`, `place_latitude`, `place_longitude`, `places_country_code`, `places_city`) VALUES (?,?,?,?,?)";
+			String sql = "INSERT INTO `places` (`place_name`, `place_latitude`, `place_longitude`, `place_country_code`, `place_city`) VALUES (?,?,?,?,?)";
 			prep = conn.prepareStatement(sql);
 			prep.setString(1, name);
 			prep.setDouble(2, latitude);
