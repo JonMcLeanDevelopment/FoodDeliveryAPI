@@ -3,6 +3,7 @@ package com.fiverr.fdapi.api.places;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -26,13 +27,14 @@ public class AddPlaceService {
 		
 		try {
 			conn = API.ds.getConnection();
-			String sql = "INSERT INTO `places` (`place_name`, `place_latitude`, `place_longitude`, `place_country_code`, `place_city`) VALUES (?,?,?,?,?)";
+			String sql = "INSERT INTO `places` (`place_name`, `place_latitude`, `place_longitude`, `place_country_code`, `place_city`, `place_uuid`) VALUES (?,?,?,?,?,?)";
 			prep = conn.prepareStatement(sql);
 			prep.setString(1, name);
 			prep.setDouble(2, latitude);
 			prep.setDouble(3, longitude);
 			prep.setString(4, countryCode);
 			prep.setString(5, city);
+			prep.setString(6, UUID.randomUUID().toString());
 			
 			prep.execute();
 			
