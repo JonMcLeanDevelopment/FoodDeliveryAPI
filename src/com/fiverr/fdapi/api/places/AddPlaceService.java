@@ -21,19 +21,19 @@ public class AddPlaceService {
 	@POST
 	@Path("/add")
 	@Produces("application/json")
-	public Response addPlace(@FormParam("name") String name,  @FormParam("latitude") double latitude, @FormParam("longitude") double longitude, @FormParam("countryCode") String countryCode, @FormParam("city") String city) throws SQLException {
+	public Response addPlace(@FormParam("name") String name,  @FormParam("latitude") double latitude, @FormParam("longitude") double longitude, @FormParam("countryCode") String countryCode, @FormParam("state") String state) throws SQLException {
 		Connection conn = null;
 		PreparedStatement prep = null;
 		
 		try {
 			conn = API.ds.getConnection();
-			String sql = "INSERT INTO `places` (`place_name`, `place_latitude`, `place_longitude`, `place_country_code`, `place_city`, `place_uuid`) VALUES (?,?,?,?,?,?)";
+			String sql = "INSERT INTO `places` (`place_name`, `place_latitude`, `place_longitude`, `place_country_code`, `place_state`, `place_uuid`) VALUES (?,?,?,?,?,?)";
 			prep = conn.prepareStatement(sql);
 			prep.setString(1, name);
 			prep.setDouble(2, latitude);
 			prep.setDouble(3, longitude);
 			prep.setString(4, countryCode);
-			prep.setString(5, city);
+			prep.setString(5, state);
 			prep.setString(6, UUID.randomUUID().toString());
 			
 			prep.execute();

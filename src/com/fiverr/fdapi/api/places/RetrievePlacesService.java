@@ -27,24 +27,26 @@ public class RetrievePlacesService {
 	@POST
 	@Path("/retrieve")
 	@Produces("application/json")
-	public Response retrieve(@FormParam("latitude") double latitude, @FormParam("longitude") double longitude, @FormParam("countryCode") String countryCode, @FormParam("city") String city) throws SQLException {
+	public Response retrieve(@FormParam("latitude") double latitude, @FormParam("longitude") double longitude, @FormParam("countryCode") String countryCode, @FormParam("state") String state) throws SQLException {
 		Connection conn = null;
 		PreparedStatement prep = null;
 		ResultSet results = null;
 		
 		try {
 			conn = API.ds.getConnection();
-			String sql = "SELECT * FROM `places` WHERE `place_country_code`=? AND `place_city`=?";
+			String sql = "SELECT * FROM `places` WHERE `place_country_code`=? AND `place_state`=?";
 			prep = conn.prepareStatement(sql);
 			
 			prep.setString(1, countryCode);
-			prep.setString(2, city);
+			prep.setString(2, state);
 			results = prep.executeQuery();
+			
+			System.out.println("Country Code: " + countryCode + " State Code: " + state);
 			
 			if(results.next() == false) {
 				JSONObject noResults = new JSONObject();
 				noResults.put("code", 421);
-				noResults.put("message", "No places found in that city and country");
+				noResults.put("message", "No places found in that state and country");
 				return Response.status(421).entity(noResults.toString()).build();
 			}
 			
@@ -52,9 +54,12 @@ public class RetrievePlacesService {
 			
 			results.beforeFirst();
 			while(results.next()) {
-				Place place = new Place(results.getString("place_name"), results.getDouble("place_latitude"), results.getDouble("place_longitude"), results.getString("place_country_code"), results.getString("place_city"), results.getString("place_uuid"));
+				Place place = new Place(results.getString("place_name"), results.getDouble("place_latitude"), results.getDouble("place_longitude"), results.getString("place_country_code"), results.getString("place_state"), results.getString("place_uuid"));
 				places.add(place);
 			}
+			
+			JSONObject data = new JSONObject();
+			data.put("code", 200);
 			
 			JSONArray validPlaces = new JSONArray();
 			
@@ -77,7 +82,9 @@ public class RetrievePlacesService {
 				}
 			}
 			
-			return Response.ok().entity(validPlaces.toString()).build();
+			data.put("data", validPlaces);
+			
+			return Response.ok().entity(data.toString()).build();
 		}catch(SQLException e) {
 			JSONObject errorReturn = new JSONObject();
 			errorReturn.put("code", 500);
