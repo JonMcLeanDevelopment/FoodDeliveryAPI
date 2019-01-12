@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -60,9 +61,12 @@ public class LoginUserService {
 			prep = conn.prepareStatement(sql);
 			
 			
-			byte[] sessionTokenBytes = new byte[16];
+			/*byte[] sessionTokenBytes = new byte[16];
 			API.rand.nextBytes(sessionTokenBytes);
-			String sessionToken = HashHelper.byteArrayToString(sessionTokenBytes);
+			String sessionToken = HashHelper.byteArrayToString(sessionTokenBytes);*/
+			
+			String unhashedSessionToken = UUID.randomUUID().toString();
+			String sessionToken = HashHelper.sha256(unhashedSessionToken);
 			
 			long currentTime = System.currentTimeMillis();
 			long expiryTime = currentTime + (604800 * 1000); // current time + 7 days
