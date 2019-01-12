@@ -68,10 +68,11 @@ public class RetrieveAverageRatingService {
 			 }
 			 
 			 double average = sum / count;
+			 double roundedAverage = (double) Math.round(average * 100) / 100;
 			 
 			 JSONObject good = new JSONObject();
 			 good.put("code", 200);
-			 good.put("average", average);
+			 good.put("average", roundedAverage);
 			 good.put("count", count);
 			 return Response.ok().entity(good.toString()).build();
 		}catch(SQLException e) {
